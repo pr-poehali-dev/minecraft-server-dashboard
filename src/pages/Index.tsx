@@ -163,40 +163,6 @@ const Index = () => {
 
   const renderHomePage = () => (
     <>
-      <header className="bg-minecraft-brown/80 backdrop-blur-sm border-b-4 border-minecraft-green shadow-lg">
-        <div className="container mx-auto px-4 py-3">
-          <nav className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="text-minecraft-green text-2xl font-bold" style={{ fontFamily: 'Press Start 2P' }}>
-                🧊 CRAFTSERVER
-              </div>
-            </div>
-            <div className="hidden md:flex space-x-6">
-              {navItems.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => setCurrentPage(item.page)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                    currentPage === item.page 
-                      ? 'bg-minecraft-green text-white' 
-                      : 'text-minecraft-white hover:bg-minecraft-green/20'
-                  }`}
-                >
-                  <Icon name={item.icon as any} size={16} />
-                  <span className="font-medium">{item.name}</span>
-                </button>
-              ))}
-            </div>
-          </nav>
-        </div>
-      </header>
-
-      {/* Page Content */}
-      {currentPage === 'home' && renderHomePage()}
-      {currentPage === 'rules' && renderRulesPage()}
-      {currentPage === 'stats' && <div className="py-20 text-center text-minecraft-white">Страница статистики в разработке</div>}
-      {currentPage === 'forum' && <div className="py-20 text-center text-minecraft-white">Форум в разработке</div>}
-      {currentPage === 'team' && <div className="py-20 text-center text-minecraft-white">Страница команды в разработке</div>}
 
       {/* Hero Section */}
       <section className="py-20 px-4">
