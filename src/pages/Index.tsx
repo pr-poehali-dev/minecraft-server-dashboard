@@ -125,25 +125,136 @@ const Index = () => {
         </div>
 
         <Card className="mt-12 bg-minecraft-green/20 border-4 border-minecraft-green animate-fade-in">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-3xl font-bold text-minecraft-white mb-4" style={{ fontFamily: 'Press Start 2P' }}>
-              ⚠️ НАКАЗАНИЯ
+          <CardContent className="p-8">
+            <h2 className="text-3xl font-bold text-minecraft-white mb-8 text-center" style={{ fontFamily: 'Press Start 2P' }}>
+              ⚠️ СИСТЕМА НАКАЗАНИЙ
             </h2>
-            <div className="grid md:grid-cols-3 gap-6 mt-8">
-              <div className="bg-minecraft-black/50 p-6 rounded-lg">
-                <div className="text-yellow-400 text-2xl mb-2">🟡</div>
-                <h3 className="text-minecraft-white font-bold mb-2">Предупреждение</h3>
-                <p className="text-minecraft-white/80 text-sm">За мелкие нарушения</p>
+            
+            {/* Punishment Categories */}
+            <div className="grid md:grid-cols-4 gap-6 mb-12">
+              <div className="bg-minecraft-black/50 p-6 rounded-lg border-2 border-yellow-400/30">
+                <div className="text-yellow-400 text-3xl mb-3 text-center">⚠️</div>
+                <h3 className="text-minecraft-white font-bold mb-3 text-center">Предупреждение</h3>
+                <ul className="text-minecraft-white/80 text-sm space-y-1">
+                  <li>• Флуд в чате</li>
+                  <li>• Капс в сообщениях</li>
+                  <li>• Мелкие споры</li>
+                  <li>• Первое нарушение</li>
+                </ul>
               </div>
-              <div className="bg-minecraft-black/50 p-6 rounded-lg">
-                <div className="text-orange-400 text-2xl mb-2">🟠</div>
-                <h3 className="text-minecraft-white font-bold mb-2">Мут/Кик</h3>
-                <p className="text-minecraft-white/80 text-sm">За нарушение правил чата</p>
+              
+              <div className="bg-minecraft-black/50 p-6 rounded-lg border-2 border-orange-400/30">
+                <div className="text-orange-400 text-3xl mb-3 text-center">🔇</div>
+                <h3 className="text-minecraft-white font-bold mb-3 text-center">Мут</h3>
+                <ul className="text-minecraft-white/80 text-sm space-y-1">
+                  <li>• Мат в чате</li>
+                  <li>• Реклама</li>
+                  <li>• Спам</li>
+                  <li>• Провокации</li>
+                </ul>
+                <div className="mt-3 text-orange-300 font-bold text-xs">30 мин - 24 часа</div>
               </div>
-              <div className="bg-minecraft-black/50 p-6 rounded-lg">
-                <div className="text-red-400 text-2xl mb-2">🔴</div>
-                <h3 className="text-minecraft-white font-bold mb-2">Бан</h3>
-                <p className="text-minecraft-white/80 text-sm">За серьёзные нарушения</p>
+              
+              <div className="bg-minecraft-black/50 p-6 rounded-lg border-2 border-red-400/30">
+                <div className="text-red-400 text-3xl mb-3 text-center">⏰</div>
+                <h3 className="text-minecraft-white font-bold mb-3 text-center">Временный бан</h3>
+                <ul className="text-minecraft-white/80 text-sm space-y-1">
+                  <li>• Гриферство</li>
+                  <li>• Кража из приватов</li>
+                  <li>• Обман в торговле</li>
+                  <li>• Читы (1-е нарушение)</li>
+                </ul>
+                <div className="mt-3 text-red-300 font-bold text-xs">1 день - 1 месяц</div>
+              </div>
+              
+              <div className="bg-minecraft-black/50 p-6 rounded-lg border-2 border-purple-400/30">
+                <div className="text-purple-400 text-3xl mb-3 text-center">🚫</div>
+                <h3 className="text-minecraft-white font-bold mb-3 text-center">Перманентный бан</h3>
+                <ul className="text-minecraft-white/80 text-sm space-y-1">
+                  <li>• Читы (повторно)</li>
+                  <li>• Дюпы и эксплойты</li>
+                  <li>• Оскорбления админов</li>
+                  <li>• Массовый грифинг</li>
+                </ul>
+                <div className="mt-3 text-purple-300 font-bold text-xs">Навсегда</div>
+              </div>
+            </div>
+
+            {/* Specific Punishments Table */}
+            <div className="bg-minecraft-black/30 rounded-lg p-6 border-2 border-minecraft-green/50">
+              <h3 className="text-minecraft-white font-bold mb-6 text-xl text-center" style={{ fontFamily: 'Press Start 2P' }}>
+                📋 ТАБЛИЦА НАКАЗАНИЙ
+              </h3>
+              
+              <div className="grid gap-4">
+                <div className="bg-minecraft-brown/30 p-4 rounded border-l-4 border-yellow-400">
+                  <div className="flex justify-between items-center">
+                    <span className="text-minecraft-white font-bold">Нецензурная лексика в чате</span>
+                    <Badge className="bg-orange-500/80">Мут 30 мин</Badge>
+                  </div>
+                </div>
+                
+                <div className="bg-minecraft-brown/30 p-4 rounded border-l-4 border-orange-400">
+                  <div className="flex justify-between items-center">
+                    <span className="text-minecraft-white font-bold">Использование читов (X-Ray, Fly)</span>
+                    <Badge className="bg-red-500/80">Бан 7 дней</Badge>
+                  </div>
+                </div>
+                
+                <div className="bg-minecraft-brown/30 p-4 rounded border-l-4 border-red-400">
+                  <div className="flex justify-between items-center">
+                    <span className="text-minecraft-white font-bold">Гриферство чужих построек</span>
+                    <Badge className="bg-red-600/80">Бан 3 дня</Badge>
+                  </div>
+                </div>
+                
+                <div className="bg-minecraft-brown/30 p-4 rounded border-l-4 border-purple-400">
+                  <div className="flex justify-between items-center">
+                    <span className="text-minecraft-white font-bold">Дюп предметов</span>
+                    <Badge className="bg-purple-600/80">Перма бан</Badge>
+                  </div>
+                </div>
+                
+                <div className="bg-minecraft-brown/30 p-4 rounded border-l-4 border-yellow-400">
+                  <div className="flex justify-between items-center">
+                    <span className="text-minecraft-white font-bold">Реклама других серверов</span>
+                    <Badge className="bg-orange-500/80">Мут 6 часов</Badge>
+                  </div>
+                </div>
+                
+                <div className="bg-minecraft-brown/30 p-4 rounded border-l-4 border-red-400">
+                  <div className="flex justify-between items-center">
+                    <span className="text-minecraft-white font-bold">Обман в торговле</span>
+                    <Badge className="bg-red-500/80">Бан 1 день</Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Appeal Process */}
+            <div className="mt-8 bg-minecraft-green/10 p-6 rounded-lg border-2 border-minecraft-green/30">
+              <h3 className="text-minecraft-white font-bold mb-4 text-lg text-center">
+                📞 ОБЖАЛОВАНИЕ НАКАЗАНИЙ
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-minecraft-green font-bold mb-2">Как подать жалобу:</h4>
+                  <ul className="text-minecraft-white/80 text-sm space-y-1">
+                    <li>1. Перейти в Discord сервера</li>
+                    <li>2. Создать тикет в #жалобы</li>
+                    <li>3. Приложить скриншоты/доказательства</li>
+                    <li>4. Дождаться рассмотрения (до 24 часов)</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-minecraft-green font-bold mb-2">Важные условия:</h4>
+                  <ul className="text-minecraft-white/80 text-sm space-y-1">
+                    <li>• Обжалование только в течение 7 дней</li>
+                    <li>• Ложные жалобы = дополнительное наказание</li>
+                    <li>• Перма баны за читы НЕ обжалуются</li>
+                    <li>• Решение старшей администрации окончательно</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </CardContent>
