@@ -44,10 +44,10 @@ const Index = () => {
       category: '📚 Основные правила',
       icon: 'BookOpen',
       rules: [
-        { id: 1, title: 'Уважение к игрокам', description: 'Запрещены оскорбления, мат и токсичное поведение в чате и голосовом общении.' },
-        { id: 2, title: 'Честная игра', description: 'Использование читов, багов и дюпов строго запрещено. Играйте честно!' },
-        { id: 3, title: 'Один аккаунт на игрока', description: 'У каждого игрока может быть только один аккаунт на сервере.' },
-        { id: 4, title: 'Русскоязычный чат', description: 'В общем чате разрешено общение только на русском языке.' }
+        { id: 1, title: 'Уважение к игрокам', description: 'Запрещены оскорбления, мат и токсичное поведение в чате и голосовом общении. Наказание: мут 30 мин - 24 часа.' },
+        { id: 2, title: 'Честная игра', description: 'Использование любых читов, багов и дюпов строго запрещено. Наказание: бан 14 дней.' },
+        { id: 3, title: 'Один аккаунт на игрока', description: 'У каждого игрока может быть только один аккаунт на сервере. Наказание: бан доп. аккаунтов.' },
+        { id: 4, title: 'Русскоязычный чат', description: 'В общем чате разрешено общение только на русском языке. Наказание: предупреждение.' }
       ]
     },
     {
@@ -56,31 +56,277 @@ const Index = () => {
       rules: [
         { id: 5, title: 'Приват территории', description: 'Желательно приватить свои постройки с помощью команд региона. За кражу из неприваченных сундуков наказания НЕ предусмотрено.' },
         { id: 6, title: 'Расстояние между домами', description: 'Минимальное расстояние между постройками разных игроков - 100 блоков. Нарушение: снос постройки + предупреждение.' },
-        { id: 7, title: 'Архитектура', description: 'Запрещены столбы в небо, нубские постройки и 1x1 домики.' },
-        { id: 8, title: 'Природа', description: 'Не оставляйте летающие деревья и большие ямы. Восстанавливайте ландшафт.' }
+        { id: 7, title: 'Архитектура', description: 'Запрещены столбы в небо, нубские постройки и 1x1 домики. Наказание: снос + предупреждение.' },
+        { id: 8, title: 'Природа и Bedrock', description: 'Не оставляйте летающие деревья и большие ямы. Bedrock запрещён к установке. Наказание: бан 1 день.' }
       ]
     },
     {
       category: '💰 Экономика и торговля',
       icon: 'DollarSign',
       rules: [
-        { id: 9, title: 'Честная торговля', description: 'Запрещено обманывать при торговле и занижать/завышать цены договорившись.' },
-        { id: 10, title: 'Магазины', description: 'Магазины должны быть оформлены и работать исправно.' },
+        { id: 9, title: 'Честная торговля', description: 'Запрещено обманывать при торговле и занижать/завышать цены договорившись. Наказание: бан 3 дня.' },
+        { id: 10, title: 'Магазины', description: 'Магазины должны быть оформлены и работать исправно. Наказание: снос магазина.' },
         { id: 11, title: 'Валюта сервера', description: 'Основная валюта - майнкоины. Бартер разрешён.' },
-        { id: 12, title: 'Банкротство', description: 'При долгах более 1000 майнкоинов имущество может быть конфисковано.' }
+        { id: 12, title: 'Банкротство', description: 'При долгах более 1000 майнкоинов имущество может быть конфисковано. Наказание: конфискация.' }
       ]
     },
     {
       category: '⚔️ PvP и конфликты',
       icon: 'Sword',
       rules: [
-        { id: 13, title: 'PvP зоны', description: 'PvP разрешено только в специально отведённых зонах и на аренах.' },
-        { id: 14, title: 'Гриферство', description: 'Разрушение чужих построек без разрешения строго запрещено.' },
+        { id: 13, title: 'PvP зоны', description: 'PvP разрешено только в специально отведённых зонах и на аренах. Наказание: бан 1 день.' },
+        { id: 14, title: 'Гриферство', description: 'Разрушение чужих построек без разрешения строго запрещено. Наказание: бан 7 дней.' },
         { id: 15, title: 'Кража', description: 'Кража из незащищённых сундуков разрешена, но не приветствуется.' },
-        { id: 16, title: 'Месть', description: 'Месть за PvP вне арен запрещена. Решайте конфликты мирно.' }
+        { id: 16, title: 'Месть', description: 'Месть за PvP вне арен запрещена. Решайте конфликты мирно. Наказание: предупреждение.' }
       ]
     }
   ];
+
+  const renderForumPage = () => (
+    <div className="py-20 px-4">
+      <div className="container mx-auto">
+        <div className="text-center mb-16 animate-fade-in">
+          <h1 className="text-5xl font-bold mb-6 text-minecraft-white" style={{ fontFamily: 'Press Start 2P' }}>
+            💬 ФОРУМ СЕРВЕРА
+          </h1>
+          <p className="text-xl text-minecraft-white/80 max-w-2xl mx-auto">
+            Обсуждения, заявки, жалобы и общение с сообществом CraftServer
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Staff Recruitment */}
+          <Card className="bg-minecraft-brown/90 border-4 border-minecraft-green hover:border-minecraft-white transition-all duration-200 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-xl flex items-center gap-3">
+                <Icon name="Crown" size={28} className="text-yellow-400" />
+                Набор в персонал
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-minecraft-white/80 mb-4">
+                Хочешь стать частью команды? Подай заявку на должность модератора или помощника!
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon name="Users" size={16} className="text-minecraft-green" />
+                  <span className="text-minecraft-white/70 text-sm">Модератор</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Shield" size={16} className="text-minecraft-green" />
+                  <span className="text-minecraft-white/70 text-sm">Помощник</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Hammer" size={16} className="text-minecraft-green" />
+                  <span className="text-minecraft-white/70 text-sm">Строитель</span>
+                </div>
+              </div>
+              <Button className="w-full bg-minecraft-green hover:bg-minecraft-green/80">
+                📝 Подать заявку
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Player Reports */}
+          <Card className="bg-minecraft-brown/90 border-4 border-red-500 hover:border-minecraft-white transition-all duration-200 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-xl flex items-center gap-3">
+                <Icon name="AlertTriangle" size={28} className="text-red-400" />
+                Жалобы на игроков
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-minecraft-white/80 mb-4">
+                Сообщи о нарушителях правил сервера. Приложи скриншоты как доказательство.
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon name="MessageSquareWarning" size={16} className="text-red-400" />
+                  <span className="text-minecraft-white/70 text-sm">Токсичность в чате</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Zap" size={16} className="text-red-400" />
+                  <span className="text-minecraft-white/70 text-sm">Использование читов</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Home" size={16} className="text-red-400" />
+                  <span className="text-minecraft-white/70 text-sm">Гриферство</span>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full border-red-400 text-red-400 hover:bg-red-400 hover:text-white">
+                🚨 Подать жалобу
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Appeal Punishments */}
+          <Card className="bg-minecraft-brown/90 border-4 border-orange-500 hover:border-minecraft-white transition-all duration-200 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-xl flex items-center gap-3">
+                <Icon name="Scale" size={28} className="text-orange-400" />
+                Обжалование наказаний
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-minecraft-white/80 mb-4">
+                Считаешь наказание несправедливым? Подай апелляцию с доказательствами.
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon name="FileText" size={16} className="text-orange-400" />
+                  <span className="text-minecraft-white/70 text-sm">Неправомерный бан</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Clock" size={16} className="text-orange-400" />
+                  <span className="text-minecraft-white/70 text-sm">Сокращение срока</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="CheckCircle" size={16} className="text-orange-400" />
+                  <span className="text-minecraft-white/70 text-sm">Полная отмена</span>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white">
+                ⚖️ Подать апелляцию
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* General Discussions */}
+          <Card className="bg-minecraft-brown/90 border-4 border-blue-500 hover:border-minecraft-white transition-all duration-200 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-xl flex items-center gap-3">
+                <Icon name="MessageCircle" size={28} className="text-blue-400" />
+                Общие обсуждения
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-minecraft-white/80 mb-4">
+                Обсуждай игру, делись постройками и общайся с другими игроками!
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon name="Image" size={16} className="text-blue-400" />
+                  <span className="text-minecraft-white/70 text-sm">Скриншоты построек</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Lightbulb" size={16} className="text-blue-400" />
+                  <span className="text-minecraft-white/70 text-sm">Идеи для сервера</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Users" size={16} className="text-blue-400" />
+                  <span className="text-minecraft-white/70 text-sm">Поиск друзей</span>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white">
+                💭 Открыть топик
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Events */}
+          <Card className="bg-minecraft-brown/90 border-4 border-purple-500 hover:border-minecraft-white transition-all duration-200 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-xl flex items-center gap-3">
+                <Icon name="Calendar" size={28} className="text-purple-400" />
+                События и конкурсы
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-minecraft-white/80 mb-4">
+                Участвуй в ивентах сервера и выигрывай ценные призы!
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon name="Trophy" size={16} className="text-purple-400" />
+                  <span className="text-minecraft-white/70 text-sm">Конкурсы построек</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Zap" size={16} className="text-purple-400" />
+                  <span className="text-minecraft-white/70 text-sm">PvP турниры</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Gift" size={16} className="text-purple-400" />
+                  <span className="text-minecraft-white/70 text-sm">Раздачи призов</span>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white">
+                🎉 Смотреть события
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Technical Support */}
+          <Card className="bg-minecraft-brown/90 border-4 border-minecraft-green hover:border-minecraft-white transition-all duration-200 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-xl flex items-center gap-3">
+                <Icon name="Settings" size={28} className="text-minecraft-green" />
+                Техническая поддержка
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-minecraft-white/80 mb-4">
+                Нужна помощь с подключением или возникли технические проблемы?
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon name="Wifi" size={16} className="text-minecraft-green" />
+                  <span className="text-minecraft-white/70 text-sm">Проблемы подключения</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Download" size={16} className="text-minecraft-green" />
+                  <span className="text-minecraft-white/70 text-sm">Установка модов</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="HelpCircle" size={16} className="text-minecraft-green" />
+                  <span className="text-minecraft-white/70 text-sm">Общие вопросы</span>
+                </div>
+              </div>
+              <Button className="w-full bg-minecraft-green hover:bg-minecraft-green/80">
+                🔧 Получить помощь
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card className="mt-12 bg-minecraft-black/30 border-2 border-minecraft-green/50 animate-fade-in">
+          <CardContent className="p-8">
+            <h2 className="text-2xl font-bold text-minecraft-white mb-6 text-center" style={{ fontFamily: 'Press Start 2P' }}>
+              📋 ПРАВИЛА ФОРУМА
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-minecraft-green font-bold mb-3">✅ Разрешено:</h3>
+                <ul className="text-minecraft-white/80 text-sm space-y-1">
+                  <li>• Конструктивные обсуждения</li>
+                  <li>• Помощь другим игрокам</li>
+                  <li>• Предложения по улучшению сервера</li>
+                  <li>• Демонстрация своих построек</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-red-400 font-bold mb-3">❌ Запрещено:</h3>
+                <ul className="text-minecraft-white/80 text-sm space-y-1">
+                  <li>• Спам и флуд сообщениями</li>
+                  <li>• Оскорбления и токсичность</li>
+                  <li>• Реклама других серверов</li>
+                  <li>• Ложные жалобы и обвинения</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center mt-12">
+          <Button 
+            onClick={() => setCurrentPage('home')}
+            className="bg-minecraft-green hover:bg-minecraft-green/80 text-white border-2 border-minecraft-white/20 text-lg px-8 py-4"
+          >
+            🏠 Вернуться на главную
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderRulesPage = () => (
     <div className="py-20 px-4">
@@ -162,7 +408,7 @@ const Index = () => {
                   <li>• Гриферство</li>
                   <li>• Кража из приватов</li>
                   <li>• Обман в торговле</li>
-                  <li>• Читы (1-е нарушение)</li>
+                  <li>• Читы (14 дней)</li>
                 </ul>
                 <div className="mt-3 text-red-300 font-bold text-xs">1 день - 1 месяц</div>
               </div>
@@ -455,7 +701,7 @@ const Index = () => {
       {currentPage === 'home' && renderHomePage()}
       {currentPage === 'rules' && renderRulesPage()}
       {currentPage === 'stats' && <div className="py-20 text-center text-minecraft-white">Страница статистики в разработке</div>}
-      {currentPage === 'forum' && <div className="py-20 text-center text-minecraft-white">Форум в разработке</div>}
+      {currentPage === 'forum' && renderForumPage()}
       {currentPage === 'team' && <div className="py-20 text-center text-minecraft-white">Страница команды в разработке</div>}
 
       {/* Footer */}
