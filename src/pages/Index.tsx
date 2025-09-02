@@ -396,12 +396,8 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-minecraft-stone to-minecraft-black">
-      {/* Header */}
 };
 
 export default Index;
