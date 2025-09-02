@@ -7,6 +7,7 @@ import Icon from '@/components/ui/icon';
 const Index = () => {
   const [onlinePlayers, setOnlinePlayers] = useState(127);
   const [maxPlayers] = useState(500);
+  const [currentPage, setCurrentPage] = useState('home');
   
   // Simulate real-time player count updates
   useEffect(() => {
@@ -31,16 +32,137 @@ const Index = () => {
   ];
 
   const navItems = [
-    { name: 'Главная', icon: 'Home', active: true },
-    { name: 'Правила', icon: 'BookOpen' },
-    { name: 'Статистика', icon: 'BarChart3' },
-    { name: 'Форум', icon: 'MessageSquare' },
-    { name: 'Команда', icon: 'Users' }
+    { name: 'Главная', icon: 'Home', page: 'home' },
+    { name: 'Правила', icon: 'BookOpen', page: 'rules' },
+    { name: 'Статистика', icon: 'BarChart3', page: 'stats' },
+    { name: 'Форум', icon: 'MessageSquare', page: 'forum' },
+    { name: 'Команда', icon: 'Users', page: 'team' }
   ];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-minecraft-stone to-minecraft-black">
-      {/* Header */}
+  const rules = [
+    {
+      category: '📚 Основные правила',
+      icon: 'BookOpen',
+      rules: [
+        { id: 1, title: 'Уважение к игрокам', description: 'Запрещены оскорбления, мат и токсичное поведение в чате и голосовом общении.' },
+        { id: 2, title: 'Честная игра', description: 'Использование читов, багов и дюпов строго запрещено. Играйте честно!' },
+        { id: 3, title: 'Один аккаунт на игрока', description: 'У каждого игрока может быть только один аккаунт на сервере.' },
+        { id: 4, title: 'Русскоязычный чат', description: 'В общем чате разрешено общение только на русском языке.' }
+      ]
+    },
+    {
+      category: '🏠 Строительство и территории',
+      icon: 'Home',
+      rules: [
+        { id: 5, title: 'Приват территории', description: 'Обязательно приватьте свои постройки с помощью команд региона.' },
+        { id: 6, title: 'Расстояние между домами', description: 'Минимальное расстояние между постройками разных игроков - 50 блоков.' },
+        { id: 7, title: 'Архитектура', description: 'Запрещены столбы в небо, нубские постройки и 1x1 домики.' },
+        { id: 8, title: 'Природа', description: 'Не оставляйте летающие деревья и большие ямы. Восстанавливайте ландшафт.' }
+      ]
+    },
+    {
+      category: '💰 Экономика и торговля',
+      icon: 'DollarSign',
+      rules: [
+        { id: 9, title: 'Честная торговля', description: 'Запрещено обманывать при торговле и занижать/завышать цены договорившись.' },
+        { id: 10, title: 'Магазины', description: 'Магазины должны быть оформлены и работать исправно.' },
+        { id: 11, title: 'Валюта сервера', description: 'Основная валюта - майнкоины. Бартер разрешён.' },
+        { id: 12, title: 'Банкротство', description: 'При долгах более 1000 майнкоинов имущество может быть конфисковано.' }
+      ]
+    },
+    {
+      category: '⚔️ PvP и конфликты',
+      icon: 'Sword',
+      rules: [
+        { id: 13, title: 'PvP зоны', description: 'PvP разрешено только в специально отведённых зонах и на аренах.' },
+        { id: 14, title: 'Гриферство', description: 'Разрушение чужих построек без разрешения строго запрещено.' },
+        { id: 15, title: 'Кража', description: 'Кража из незащищённых сундуков разрешена, но не приветствуется.' },
+        { id: 16, title: 'Месть', description: 'Месть за PvP вне арен запрещена. Решайте конфликты мирно.' }
+      ]
+    }
+  ];
+
+  const renderRulesPage = () => (
+    <div className="py-20 px-4">
+      <div className="container mx-auto">
+        <div className="text-center mb-16 animate-fade-in">
+          <h1 className="text-5xl font-bold mb-6 text-minecraft-white" style={{ fontFamily: 'Press Start 2P' }}>
+            📋 ПРАВИЛА СЕРВЕРА
+          </h1>
+          <p className="text-xl text-minecraft-white/80 max-w-2xl mx-auto">
+            Соблюдение правил обязательно для всех игроков. Незнание правил не освобождает от ответственности!
+          </p>
+        </div>
+
+        <div className="grid gap-8">
+          {rules.map((section, sectionIndex) => (
+            <Card key={sectionIndex} className="bg-minecraft-brown/90 border-4 border-minecraft-green animate-fade-in">
+              <CardHeader>
+                <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+                  <Icon name={section.icon as any} size={32} className="text-minecraft-green" />
+                  {section.category}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4">
+                  {section.rules.map((rule, ruleIndex) => (
+                    <div key={rule.id} className="bg-minecraft-black/30 p-6 rounded-lg border-2 border-minecraft-green/30 hover:border-minecraft-green transition-all duration-200">
+                      <div className="flex items-start gap-4">
+                        <div className="bg-minecraft-green text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                          {rule.id}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold text-minecraft-white mb-2">{rule.title}</h3>
+                          <p className="text-minecraft-white/80">{rule.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <Card className="mt-12 bg-minecraft-green/20 border-4 border-minecraft-green animate-fade-in">
+          <CardContent className="p-8 text-center">
+            <h2 className="text-3xl font-bold text-minecraft-white mb-4" style={{ fontFamily: 'Press Start 2P' }}>
+              ⚠️ НАКАЗАНИЯ
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6 mt-8">
+              <div className="bg-minecraft-black/50 p-6 rounded-lg">
+                <div className="text-yellow-400 text-2xl mb-2">🟡</div>
+                <h3 className="text-minecraft-white font-bold mb-2">Предупреждение</h3>
+                <p className="text-minecraft-white/80 text-sm">За мелкие нарушения</p>
+              </div>
+              <div className="bg-minecraft-black/50 p-6 rounded-lg">
+                <div className="text-orange-400 text-2xl mb-2">🟠</div>
+                <h3 className="text-minecraft-white font-bold mb-2">Мут/Кик</h3>
+                <p className="text-minecraft-white/80 text-sm">За нарушение правил чата</p>
+              </div>
+              <div className="bg-minecraft-black/50 p-6 rounded-lg">
+                <div className="text-red-400 text-2xl mb-2">🔴</div>
+                <h3 className="text-minecraft-white font-bold mb-2">Бан</h3>
+                <p className="text-minecraft-white/80 text-sm">За серьёзные нарушения</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center mt-12">
+          <Button 
+            onClick={() => setCurrentPage('home')}
+            className="bg-minecraft-green hover:bg-minecraft-green/80 text-white border-2 border-minecraft-white/20 text-lg px-8 py-4"
+          >
+            🏠 Вернуться на главную
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderHomePage = () => (
+    <>
       <header className="bg-minecraft-brown/80 backdrop-blur-sm border-b-4 border-minecraft-green shadow-lg">
         <div className="container mx-auto px-4 py-3">
           <nav className="flex items-center justify-between">
@@ -53,8 +175,9 @@ const Index = () => {
               {navItems.map((item) => (
                 <button
                   key={item.name}
+                  onClick={() => setCurrentPage(item.page)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                    item.active 
+                    currentPage === item.page 
                       ? 'bg-minecraft-green text-white' 
                       : 'text-minecraft-white hover:bg-minecraft-green/20'
                   }`}
@@ -67,6 +190,13 @@ const Index = () => {
           </nav>
         </div>
       </header>
+
+      {/* Page Content */}
+      {currentPage === 'home' && renderHomePage()}
+      {currentPage === 'rules' && renderRulesPage()}
+      {currentPage === 'stats' && <div className="py-20 text-center text-minecraft-white">Страница статистики в разработке</div>}
+      {currentPage === 'forum' && <div className="py-20 text-center text-minecraft-white">Форум в разработке</div>}
+      {currentPage === 'team' && <div className="py-20 text-center text-minecraft-white">Страница команды в разработке</div>}
 
       {/* Hero Section */}
       <section className="py-20 px-4">
@@ -202,6 +332,7 @@ const Index = () => {
             <Button 
               size="lg"
               variant="outline"
+              onClick={() => setCurrentPage('rules')}
               className="border-2 border-minecraft-green text-minecraft-green hover:bg-minecraft-green hover:text-white text-lg px-8 py-4"
             >
               📖 Читать правила
@@ -209,6 +340,46 @@ const Index = () => {
           </div>
         </div>
       </section>
+    </>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-minecraft-stone to-minecraft-black">
+      {/* Header */}
+      <header className="bg-minecraft-brown/80 backdrop-blur-sm border-b-4 border-minecraft-green shadow-lg">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="text-minecraft-green text-2xl font-bold" style={{ fontFamily: 'Press Start 2P' }}>
+                🧊 CRAFTSERVER
+              </div>
+            </div>
+            <div className="hidden md:flex space-x-6">
+              {navItems.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => setCurrentPage(item.page)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                    currentPage === item.page 
+                      ? 'bg-minecraft-green text-white' 
+                      : 'text-minecraft-white hover:bg-minecraft-green/20'
+                  }`}
+                >
+                  <Icon name={item.icon as any} size={16} />
+                  <span className="font-medium">{item.name}</span>
+                </button>
+              ))}
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      {/* Page Content */}
+      {currentPage === 'home' && renderHomePage()}
+      {currentPage === 'rules' && renderRulesPage()}
+      {currentPage === 'stats' && <div className="py-20 text-center text-minecraft-white">Страница статистики в разработке</div>}
+      {currentPage === 'forum' && <div className="py-20 text-center text-minecraft-white">Форум в разработке</div>}
+      {currentPage === 'team' && <div className="py-20 text-center text-minecraft-white">Страница команды в разработке</div>}
 
       {/* Footer */}
       <footer className="bg-minecraft-black/80 py-8 px-4 border-t-4 border-minecraft-green">
@@ -225,8 +396,12 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-minecraft-stone to-minecraft-black">
+      {/* Header */}
 };
 
 export default Index;
