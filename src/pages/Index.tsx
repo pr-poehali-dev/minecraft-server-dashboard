@@ -8,6 +8,15 @@ const Index = () => {
   const [onlinePlayers, setOnlinePlayers] = useState(127);
   const [maxPlayers] = useState(500);
   const [currentPage, setCurrentPage] = useState('home');
+  const [showStaffForm, setShowStaffForm] = useState(false);
+  const [staffApplication, setStaffApplication] = useState({
+    age: '',
+    fullName: '',
+    position: '',
+    workExperience: '',
+    skills: '',
+    about: ''
+  });
   
   // Simulate real-time player count updates
   useEffect(() => {
@@ -121,7 +130,10 @@ const Index = () => {
                   <span className="text-minecraft-white/70 text-sm">Строитель</span>
                 </div>
               </div>
-              <Button className="w-full bg-minecraft-green hover:bg-minecraft-green/80">
+              <Button 
+                onClick={() => setShowStaffForm(true)}
+                className="w-full bg-minecraft-green hover:bg-minecraft-green/80"
+              >
                 📝 Подать заявку
               </Button>
             </CardContent>
@@ -325,6 +337,134 @@ const Index = () => {
           </Button>
         </div>
       </div>
+    </div>
+  );
+
+  const renderStaffApplicationForm = () => (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+      <Card className="bg-minecraft-brown border-4 border-minecraft-green w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <CardHeader>
+          <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+            <Icon name="Crown" size={32} className="text-yellow-400" />
+            Заявка в персонал
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              1. Сколько вам лет? <span className="text-red-400">(Минимум 11 лет)</span>
+            </label>
+            <input
+              type="number"
+              min="11"
+              value={staffApplication.age}
+              onChange={(e) => setStaffApplication({...staffApplication, age: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-minecraft-green text-minecraft-white rounded"
+              placeholder="Введите ваш возраст"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              2. Как вас зовут? (ФИО)
+            </label>
+            <input
+              type="text"
+              value={staffApplication.fullName}
+              onChange={(e) => setStaffApplication({...staffApplication, fullName: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-minecraft-green text-minecraft-white rounded"
+              placeholder="Фамилия Имя Отчество"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              3. На кого вы хотите?
+            </label>
+            <select
+              value={staffApplication.position}
+              onChange={(e) => setStaffApplication({...staffApplication, position: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-minecraft-green text-minecraft-white rounded"
+            >
+              <option value="">Выберите должность</option>
+              <option value="Модератор">Модератор</option>
+              <option value="Помощник">Помощник</option>
+              <option value="Строитель">Строитель</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              4. Где вы уже работали и кем?
+            </label>
+            <textarea
+              value={staffApplication.workExperience}
+              onChange={(e) => setStaffApplication({...staffApplication, workExperience: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-minecraft-green text-minecraft-white rounded h-24"
+              placeholder="Опишите ваш опыт работы на других серверах или проектах"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              5. Опишите насколько вы хороши
+            </label>
+            <textarea
+              value={staffApplication.skills}
+              onChange={(e) => setStaffApplication({...staffApplication, skills: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-minecraft-green text-minecraft-white rounded h-24"
+              placeholder="Ваши навыки, умения и достижения"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              6. Немного о себе
+            </label>
+            <textarea
+              value={staffApplication.about}
+              onChange={(e) => setStaffApplication({...staffApplication, about: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-minecraft-green text-minecraft-white rounded h-32"
+              placeholder="Расскажите о себе, ваших увлечениях и мотивации"
+            />
+          </div>
+
+          <div className="flex gap-4">
+            <Button 
+              onClick={() => {
+                if (!staffApplication.age || parseInt(staffApplication.age) < 11) {
+                  alert('Возраст должен быть не менее 11 лет');
+                  return;
+                }
+                if (!staffApplication.fullName || !staffApplication.position || !staffApplication.workExperience || !staffApplication.skills || !staffApplication.about) {
+                  alert('Пожалуйста, заполните все поля');
+                  return;
+                }
+                alert('Заявка отправлена! Ожидайте рассмотрения администрацией.');
+                setShowStaffForm(false);
+                setStaffApplication({
+                  age: '',
+                  fullName: '',
+                  position: '',
+                  workExperience: '',
+                  skills: '',
+                  about: ''
+                });
+              }}
+              className="flex-1 bg-minecraft-green hover:bg-minecraft-green/80"
+            >
+              ✅ Отправить заявку
+            </Button>
+            <Button 
+              onClick={() => setShowStaffForm(false)}
+              variant="outline"
+              className="flex-1 border-red-400 text-red-400 hover:bg-red-400 hover:text-white"
+            >
+              ❌ Отмена
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 
@@ -703,6 +843,9 @@ const Index = () => {
       {currentPage === 'stats' && <div className="py-20 text-center text-minecraft-white">Страница статистики в разработке</div>}
       {currentPage === 'forum' && renderForumPage()}
       {currentPage === 'team' && <div className="py-20 text-center text-minecraft-white">Страница команды в разработке</div>}
+
+      {/* Staff Application Form Modal */}
+      {showStaffForm && renderStaffApplicationForm()}
 
       {/* Footer */}
       <footer className="bg-minecraft-black/80 py-8 px-4 border-t-4 border-minecraft-green">
