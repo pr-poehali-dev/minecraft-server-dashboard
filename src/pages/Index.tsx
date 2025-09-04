@@ -9,6 +9,7 @@ const Index = () => {
   const [maxPlayers] = useState(500);
   const [currentPage, setCurrentPage] = useState('home');
   const [showStaffForm, setShowStaffForm] = useState(false);
+  const [showReportForm, setShowReportForm] = useState(false);
   const [hoveredRule, setHoveredRule] = useState<number | null>(null);
   const [staffApplication, setStaffApplication] = useState({
     age: '',
@@ -16,7 +17,16 @@ const Index = () => {
     position: '',
     workExperience: '',
     skills: '',
-    about: ''
+    about: '',
+    email: ''
+  });
+  const [reportForm, setReportForm] = useState({
+    yourNick: '',
+    yourName: '',
+    violatorNick: '',
+    evidence: '',
+    description: '',
+    email: ''
   });
   
   // Simulate real-time player count updates
@@ -167,7 +177,7 @@ const Index = () => {
                 </div>
               </div>
               <Button 
-                onClick={() => alert('🚨 Форма жалобы:\n\n1. Никнейм нарушителя\n2. Тип нарушения (читы/гриферство/токсичность)\n3. Скриншоты/доказательства\n4. Описание ситуации\n5. Дата и время\n\n📧 Отправить на: report@craftserver.ru')}
+                onClick={() => setShowReportForm(true)}
                 variant="outline" 
                 className="w-full border-red-400 text-red-400 hover:bg-red-400 hover:text-white"
               >
@@ -449,6 +459,22 @@ const Index = () => {
             />
           </div>
 
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              7. Ваш E-mail <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="email"
+              value={staffApplication.email}
+              onChange={(e) => setStaffApplication({...staffApplication, email: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-minecraft-green text-minecraft-white rounded"
+              placeholder="example@email.com"
+            />
+            <p className="text-minecraft-white/60 text-sm mt-1">
+              📧 На эту почту придёт уведомление о статусе заявки
+            </p>
+          </div>
+
           <div className="flex gap-4">
             <Button 
               onClick={() => {
@@ -456,11 +482,20 @@ const Index = () => {
                   alert('Возраст должен быть не менее 11 лет');
                   return;
                 }
-                if (!staffApplication.fullName || !staffApplication.position || !staffApplication.workExperience || !staffApplication.skills || !staffApplication.about) {
+                if (!staffApplication.fullName || !staffApplication.position || !staffApplication.workExperience || !staffApplication.skills || !staffApplication.about || !staffApplication.email) {
                   alert('Пожалуйста, заполните все поля');
                   return;
                 }
-                alert('Заявка отправлена! Ожидайте рассмотрения администрацией.');
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(staffApplication.email)) {
+                  alert('Пожалуйста, введите корректный email адрес');
+                  return;
+                }
+
+                // Симуляция отправки email
+                alert(`✅ Заявка в персонал отправлена!\n\n📧 На адрес ${staffApplication.email} отправлено письмо:\n\n"Здравствуйте, ${staffApplication.fullName}!\n\nВаша заявка на должность '${staffApplication.position}' получена и будет рассмотрена администрацией в течение 3-5 рабочих дней.\n\nНомер заявки: #${Math.floor(Math.random() * 10000)}\n\nМы свяжемся с вами после рассмотрения.\n\nСпасибо за интерес к нашему проекту!\n\nАдминистрация CraftServer"`);
+                
                 setShowStaffForm(false);
                 setStaffApplication({
                   age: '',
@@ -468,7 +503,8 @@ const Index = () => {
                   position: '',
                   workExperience: '',
                   skills: '',
-                  about: ''
+                  about: '',
+                  email: ''
                 });
               }}
               className="flex-1 bg-minecraft-green hover:bg-minecraft-green/80"
@@ -479,6 +515,441 @@ const Index = () => {
               onClick={() => setShowStaffForm(false)}
               variant="outline"
               className="flex-1 border-red-400 text-red-400 hover:bg-red-400 hover:text-white"
+            >
+              ❌ Отмена
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderStatsPage = () => (
+    <div className="py-20 px-4">
+      <div className="container mx-auto">
+        <div className="text-center mb-16 animate-fade-in">
+          <h1 className="text-5xl font-bold mb-6 text-minecraft-white" style={{ fontFamily: 'Press Start 2P' }}>
+            📊 СТАТИСТИКА СЕРВЕРА
+          </h1>
+          <p className="text-xl text-minecraft-white/80 max-w-2xl mx-auto">
+            Актуальная статистика игроков, экономики и активности на CraftServer
+          </p>
+        </div>
+
+        {/* Online Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <Card className="bg-minecraft-brown/90 border-4 border-minecraft-green hover:border-minecraft-white transition-all duration-200">
+            <CardContent className="p-6 text-center">
+              <Icon name="Users" size={48} className="text-minecraft-green mx-auto mb-4" />
+              <div className="text-3xl font-bold text-minecraft-white mb-2">{onlinePlayers}/{maxPlayers}</div>
+              <div className="text-minecraft-white/80">Онлайн игроков</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-minecraft-brown/90 border-4 border-blue-500 hover:border-minecraft-white transition-all duration-200">
+            <CardContent className="p-6 text-center">
+              <Icon name="Clock" size={48} className="text-blue-400 mx-auto mb-4" />
+              <div className="text-3xl font-bold text-minecraft-white mb-2">99.8%</div>
+              <div className="text-minecraft-white/80">Аптайм сервера</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-minecraft-brown/90 border-4 border-yellow-500 hover:border-minecraft-white transition-all duration-200">
+            <CardContent className="p-6 text-center">
+              <Icon name="Zap" size={48} className="text-yellow-400 mx-auto mb-4" />
+              <div className="text-3xl font-bold text-minecraft-white mb-2">19.9</div>
+              <div className="text-minecraft-white/80">Средний TPS</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-minecraft-brown/90 border-4 border-purple-500 hover:border-minecraft-white transition-all duration-200">
+            <CardContent className="p-6 text-center">
+              <Icon name="Trophy" size={48} className="text-purple-400 mx-auto mb-4" />
+              <div className="text-3xl font-bold text-minecraft-white mb-2">2,847</div>
+              <div className="text-minecraft-white/80">Всего игроков</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Detailed Stats */}
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <Card className="bg-minecraft-brown/90 border-4 border-minecraft-green">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+                <Icon name="BarChart3" size={32} className="text-minecraft-green" />
+                Активность игроков
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Новые игроки за неделю</span>
+                  <Badge className="bg-minecraft-green text-white">+247</Badge>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Активных за сутки</span>
+                  <Badge className="bg-blue-500 text-white">1,893</Badge>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Средний онлайн</span>
+                  <Badge className="bg-purple-500 text-white">156 игр.</Badge>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Пик онлайна</span>
+                  <Badge className="bg-red-500 text-white">287 игр.</Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-minecraft-brown/90 border-4 border-yellow-500">
+            <CardHeader>
+              <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+                <Icon name="DollarSign" size={32} className="text-yellow-400" />
+                Экономика сервера
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Всего майнкоинов</span>
+                  <Badge className="bg-yellow-500 text-white">2.8M ⭐</Badge>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Торговых сделок/день</span>
+                  <Badge className="bg-green-500 text-white">1,247</Badge>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Активных магазинов</span>
+                  <Badge className="bg-blue-500 text-white">89</Badge>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-minecraft-black/30 rounded">
+                  <span className="text-minecraft-white">Средняя цена алмаза</span>
+                  <Badge className="bg-cyan-500 text-white">45 ⭐</Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* World Stats */}
+        <Card className="bg-minecraft-brown/90 border-4 border-red-500 mb-12">
+          <CardHeader>
+            <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+              <Icon name="Globe" size={32} className="text-red-400" />
+              Статистика мира
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <Icon name="Home" size={40} className="text-minecraft-green mx-auto mb-3" />
+                <div className="text-2xl font-bold text-minecraft-white mb-1">3,472</div>
+                <div className="text-minecraft-white/80">Построек игроков</div>
+              </div>
+              <div className="text-center">
+                <Icon name="Shield" size={40} className="text-blue-400 mx-auto mb-3" />
+                <div className="text-2xl font-bold text-minecraft-white mb-1">1,847</div>
+                <div className="text-minecraft-white/80">Приватов регионов</div>
+              </div>
+              <div className="text-center">
+                <Icon name="MapPin" size={40} className="text-purple-400 mx-auto mb-3" />
+                <div className="text-2xl font-bold text-minecraft-white mb-1">15.2GB</div>
+                <div className="text-minecraft-white/80">Размер мира</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Top Players */}
+        <Card className="bg-minecraft-brown/90 border-4 border-minecraft-green">
+          <CardHeader>
+            <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+              <Icon name="Crown" size={32} className="text-yellow-400" />
+              Топ игроков месяца
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-minecraft-black/30 p-4 rounded-lg text-center">
+                <div className="text-4xl mb-2">🥇</div>
+                <div className="text-xl font-bold text-minecraft-white mb-1">SteveCrafter</div>
+                <div className="text-minecraft-white/80">128 часов игры</div>
+                <div className="text-yellow-400 text-sm">Король строителей</div>
+              </div>
+              <div className="bg-minecraft-black/30 p-4 rounded-lg text-center">
+                <div className="text-4xl mb-2">🥈</div>
+                <div className="text-xl font-bold text-minecraft-white mb-1">AlexMiner</div>
+                <div className="text-minecraft-white/80">97 часов игры</div>
+                <div className="text-gray-400 text-sm">Мастер редстоуна</div>
+              </div>
+              <div className="bg-minecraft-black/30 p-4 rounded-lg text-center">
+                <div className="text-4xl mb-2">🥉</div>
+                <div className="text-xl font-bold text-minecraft-white mb-1">NoobSlayer</div>
+                <div className="text-minecraft-white/80">84 часа игры</div>
+                <div className="text-orange-400 text-sm">PvP чемпион</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center mt-12">
+          <Button 
+            onClick={() => setCurrentPage('home')}
+            className="bg-minecraft-green hover:bg-minecraft-green/80 text-white border-2 border-minecraft-white/20 text-lg px-8 py-4"
+          >
+            🏠 Вернуться на главную
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderTeamPage = () => (
+    <div className="py-20 px-4">
+      <div className="container mx-auto">
+        <div className="text-center mb-16 animate-fade-in">
+          <h1 className="text-5xl font-bold mb-6 text-minecraft-white" style={{ fontFamily: 'Press Start 2P' }}>
+            👥 КОМАНДА ПРОЕКТА
+          </h1>
+          <p className="text-xl text-minecraft-white/80 max-w-2xl mx-auto">
+            Администрация и модераторы, которые делают CraftServer лучшим местом для игры
+          </p>
+        </div>
+
+        {/* Administration */}
+        <Card className="mb-12 bg-minecraft-brown/90 border-4 border-red-500">
+          <CardHeader>
+            <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+              <Icon name="Crown" size={32} className="text-red-400" />
+              Администрация
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-minecraft-black/30 p-6 rounded-lg border-2 border-red-400/30">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
+                    <Icon name="Crown" size={32} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-minecraft-white">MasterAdmin</h3>
+                    <p className="text-red-400">Главный администратор</p>
+                  </div>
+                </div>
+                <p className="text-minecraft-white/80 mb-3">Основатель сервера. Отвечает за общее развитие проекта и стратегические решения.</p>
+                <div className="text-minecraft-white/60 text-sm">📧 admin@craftserver.ru</div>
+              </div>
+
+              <div className="bg-minecraft-black/30 p-6 rounded-lg border-2 border-orange-400/30">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
+                    <Icon name="Settings" size={32} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-minecraft-white">TechGuru</h3>
+                    <p className="text-orange-400">Технический администратор</p>
+                  </div>
+                </div>
+                <p className="text-minecraft-white/80 mb-3">Отвечает за техническую часть сервера, плагины и обновления.</p>
+                <div className="text-minecraft-white/60 text-sm">📧 tech@craftserver.ru</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Moderators */}
+        <Card className="mb-12 bg-minecraft-brown/90 border-4 border-minecraft-green">
+          <CardHeader>
+            <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+              <Icon name="Shield" size={32} className="text-minecraft-green" />
+              Модераторы
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4">
+              {[
+                { name: 'GuardianMod', role: 'Старший модератор', desc: 'Следит за порядком в чате и решает конфликты' },
+                { name: 'BuildMaster', role: 'Модератор строительства', desc: 'Проверяет постройки и помогает строителям' },
+                { name: 'EventManager', role: 'Модератор событий', desc: 'Организует ивенты и конкурсы для игроков' },
+                { name: 'SupportHelper', role: 'Модератор поддержки', desc: 'Помогает новичкам и отвечает на вопросы' },
+                { name: 'AntiGrief', role: 'Модератор безопасности', desc: 'Борется с гриферами и читерами' },
+                { name: 'EcoMod', role: 'Модератор экономики', desc: 'Следит за торговлей и экономикой сервера' }
+              ].map((mod, index) => (
+                <div key={index} className="bg-minecraft-black/30 p-4 rounded-lg border-2 border-minecraft-green/30">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-minecraft-green rounded-full flex items-center justify-center">
+                      <Icon name="Shield" size={20} className="text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-minecraft-white">{mod.name}</h4>
+                      <p className="text-minecraft-green text-sm">{mod.role}</p>
+                    </div>
+                  </div>
+                  <p className="text-minecraft-white/80 text-sm">{mod.desc}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Helpers */}
+        <Card className="mb-12 bg-minecraft-brown/90 border-4 border-blue-500">
+          <CardHeader>
+            <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+              <Icon name="Users" size={32} className="text-blue-400" />
+              Помощники
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center text-minecraft-white/80">
+              <p className="mb-4">У нас работает команда из 12 активных помощников,</p>
+              <p className="mb-4">которые всегда готовы помочь новичкам освоиться на сервере.</p>
+              <Badge className="bg-blue-500 text-white text-lg px-4 py-2">12 активных помощников</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center">
+          <Button 
+            onClick={() => setCurrentPage('home')}
+            className="bg-minecraft-green hover:bg-minecraft-green/80 text-white border-2 border-minecraft-white/20 text-lg px-8 py-4"
+          >
+            🏠 Вернуться на главную
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderReportForm = () => (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+      <Card className="bg-minecraft-brown border-4 border-red-500 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <CardHeader>
+          <CardTitle className="text-minecraft-white text-2xl flex items-center gap-3" style={{ fontFamily: 'Press Start 2P' }}>
+            <Icon name="AlertTriangle" size={32} className="text-red-400" />
+            Жалоба на игрока
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              1. Ваш игровой ник <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              value={reportForm.yourNick}
+              onChange={(e) => setReportForm({...reportForm, yourNick: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-red-500 text-minecraft-white rounded"
+              placeholder="Ваш ник в игре"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              2. Как вас зовут? <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              value={reportForm.yourName}
+              onChange={(e) => setReportForm({...reportForm, yourName: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-red-500 text-minecraft-white rounded"
+              placeholder="Ваше имя"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              3. Ник нарушителя <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              value={reportForm.violatorNick}
+              onChange={(e) => setReportForm({...reportForm, violatorNick: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-red-500 text-minecraft-white rounded"
+              placeholder="Ник игрока-нарушителя"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              4. Скриншот или видео <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              value={reportForm.evidence}
+              onChange={(e) => setReportForm({...reportForm, evidence: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-red-500 text-minecraft-white rounded"
+              placeholder="Ссылка на скриншот/видео (imgur, youtube и т.д.)"
+            />
+            <p className="text-minecraft-white/60 text-sm mt-1">
+              📸 Загрузите доказательства на imgur.com или другой сервис и вставьте ссылку
+            </p>
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              5. Описать что нарушил нарушитель <span className="text-red-400">*</span>
+            </label>
+            <textarea
+              value={reportForm.description}
+              onChange={(e) => setReportForm({...reportForm, description: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-red-500 text-minecraft-white rounded h-32"
+              placeholder="Подробно опишите нарушение: что произошло, когда, какое правило было нарушено"
+            />
+          </div>
+
+          <div>
+            <label className="text-minecraft-white font-bold mb-2 block">
+              6. Ваш E-mail <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="email"
+              value={reportForm.email}
+              onChange={(e) => setReportForm({...reportForm, email: e.target.value})}
+              className="w-full p-3 bg-minecraft-black/50 border-2 border-red-500 text-minecraft-white rounded"
+              placeholder="example@email.com"
+            />
+            <p className="text-minecraft-white/60 text-sm mt-1">
+              📧 На эту почту придёт уведомление о рассмотрении жалобы
+            </p>
+          </div>
+
+          <div className="flex gap-4">
+            <Button 
+              onClick={() => {
+                if (!reportForm.yourNick || !reportForm.yourName || !reportForm.violatorNick || !reportForm.evidence || !reportForm.description || !reportForm.email) {
+                  alert('Пожалуйста, заполните все обязательные поля');
+                  return;
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(reportForm.email)) {
+                  alert('Пожалуйста, введите корректный email адрес');
+                  return;
+                }
+
+                // Симуляция отправки email
+                alert(`✅ Жалоба отправлена!\n\n📧 На адрес ${reportForm.email} отправлено письмо:\n\n"Здравствуйте, ${reportForm.yourName}!\n\nВаша жалоба на игрока ${reportForm.violatorNick} получена и будет рассмотрена администрацией в течение 24 часов.\n\nНомер обращения: #${Math.floor(Math.random() * 10000)}\n\nСпасибо за помощь в поддержании порядка на сервере!\n\nАдминистрация CraftServer"`);
+                
+                setShowReportForm(false);
+                setReportForm({
+                  yourNick: '',
+                  yourName: '',
+                  violatorNick: '',
+                  evidence: '',
+                  description: '',
+                  email: ''
+                });
+              }}
+              className="flex-1 bg-red-500 hover:bg-red-600"
+            >
+              🚨 Отправить жалобу
+            </Button>
+            <Button 
+              onClick={() => setShowReportForm(false)}
+              variant="outline"
+              className="flex-1 border-gray-400 text-gray-400 hover:bg-gray-400 hover:text-white"
             >
               ❌ Отмена
             </Button>
@@ -873,12 +1344,15 @@ const Index = () => {
       {/* Page Content */}
       {currentPage === 'home' && renderHomePage()}
       {currentPage === 'rules' && renderRulesPage()}
-      {currentPage === 'stats' && <div className="py-20 text-center text-minecraft-white">Страница статистики в разработке</div>}
+      {currentPage === 'stats' && renderStatsPage()}
       {currentPage === 'forum' && renderForumPage()}
-      {currentPage === 'team' && <div className="py-20 text-center text-minecraft-white">Страница команды в разработке</div>}
+      {currentPage === 'team' && renderTeamPage()}
 
       {/* Staff Application Form Modal */}
       {showStaffForm && renderStaffApplicationForm()}
+
+      {/* Report Form Modal */}
+      {showReportForm && renderReportForm()}
 
       {/* Footer */}
       <footer className="bg-minecraft-black/80 py-8 px-4 border-t-4 border-minecraft-green">
